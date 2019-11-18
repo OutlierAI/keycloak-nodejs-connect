@@ -17,14 +17,14 @@
 
 const UUID = require('./../uuid');
 
-function forceLogin (keycloak, request, response) {
-  let host = request.hostname;
+function forceLogin (keycloak, request, response, next) {
   let headerHost = request.headers.host.split(':');
+  let host = headerHost[0];
   let port = headerHost[1] || '';
-  let protocol = request.protocol;
+  let protocol = request.isSecure() ? 'https' : 'http';
   let hasQuery = ~(request.originalUrl || request.url).indexOf('?');
 
-  let redirectUrl = protocol + '://' + host + (port === '' ? '' : ':' + port) + (request.originalUrl || request.url) + (hasQuery ? '&' : '?') + 'auth_callback=1';
+  let redirectUrl = protocol + '://' + host + (port === '' ? '' : ':' + port) + '/saml_callback' + (hasQuery ? '&' : '?') + 'auth_callback=1';
 
   if (request.session) {
     request.session.auth_redirect_uri = redirectUrl;
@@ -32,7 +32,7 @@ function forceLogin (keycloak, request, response) {
 
   let uuid = UUID();
   let loginURL = keycloak.loginUrl(uuid, redirectUrl);
-  response.redirect(loginURL);
+  response.redirect(loginURL, next);
 }
 
 function simpleGuard (role, token) {
@@ -58,7 +58,7 @@ module.exports = function (keycloak, spec) {
     }
 
     if (keycloak.redirectToLogin(request)) {
-      forceLogin(keycloak, request, response);
+      forceLogin(keycloak, request, response, next);
     } else {
       return keycloak.accessDenied(request, response, next);
     }

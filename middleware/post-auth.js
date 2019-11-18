@@ -35,7 +35,7 @@ module.exports = function (keycloak) {
     keycloak.getGrantFromCode(request.query.code, request, response)
       .then(grant => {
         let urlParts = {
-          pathname: request.path,
+          pathname: request.path(),
           query: request.query
         };
 
@@ -52,7 +52,7 @@ module.exports = function (keycloak) {
         } catch (err) {
           console.log(err);
         }
-        response.redirect(cleanUrl);
+        response.redirect(cleanUrl, next);
       }).catch((err) => {
         keycloak.accessDenied(request, response, next);
         console.error('Could not obtain grant code: ' + err);
