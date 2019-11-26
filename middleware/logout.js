@@ -15,8 +15,12 @@
  */
 'use strict';
 
-module.exports = function (keycloak, logoutUrl) {
+module.exports = function (keycloakAdapters, logoutUrl) {
   return function logout (request, response, next) {
+    const keycloak = request.session.realmInfo && request.session.realmInfo.name ?
+      keycloakAdapters[request.session.realmInfo.name] :
+      keycloakAdapters['Default-Realm'];
+
     if (request.url !== logoutUrl) {
       return next();
     }
