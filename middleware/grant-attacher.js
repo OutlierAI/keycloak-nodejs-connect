@@ -15,8 +15,12 @@
  */
 'use strict';
 
-module.exports = function (keycloak) {
+module.exports = function (keycloakAdapters) {
   return function grantAttacher (request, response, next) {
+    const keycloak = request.session.realmInfo && request.session.realmInfo.name ?
+      keycloakAdapters[request.session.realmInfo.name] :
+      keycloakAdapters['Default-Realm'];
+
     keycloak.getGrant(request, response)
       .then(grant => {
         request.kauth.grant = grant;
