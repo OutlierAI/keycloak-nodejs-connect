@@ -105,8 +105,9 @@ function Keycloak (config, keycloakConfig) {
  *  - `admin` Root URL for Keycloak admin callbacks.  Defaults to `/`.
  *
  * @param {Object} options Optional options for specifying details.
+ * @param {Object} keycloakAdapters A hash of adapters for our realms.
  */
-Keycloak.prototype.middleware = function (options) {
+Keycloak.prototype.middleware = function (options, keycloakAdapters) {
   if (!options) {
     options = { logout: '', admin: '' };
   }
@@ -117,10 +118,10 @@ Keycloak.prototype.middleware = function (options) {
   var middlewares = [];
 
   middlewares.push(Setup);
-  middlewares.push(PostAuth(this));
-  middlewares.push(Admin(this, options.admin));
-  middlewares.push(GrantAttacher(this));
-  middlewares.push(Logout(this, options.logout));
+  middlewares.push(PostAuth(keycloakAdapters));
+  middlewares.push(Admin(keycloakAdapters, options.admin));
+  middlewares.push(GrantAttacher(keycloakAdapters));
+  middlewares.push(Logout(keycloakAdapters, options.logout));
 
   return middlewares;
 };

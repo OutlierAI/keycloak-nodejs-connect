@@ -15,8 +15,12 @@
  */
 'use strict';
 
-module.exports = function (keycloak, logoutUrl) {
+module.exports = function (keycloakAdapters, logoutUrl) {
   return function logout (request, response, next) {
+    const keycloak = request.session.realmInfo && request.session.realmInfo.name ?
+      keycloakAdapters[request.session.realmInfo.name] :
+      keycloakAdapters['Default-Realm'];
+
     if (request.url !== logoutUrl) {
       return next();
     }
@@ -27,12 +31,13 @@ module.exports = function (keycloak, logoutUrl) {
       delete request.kauth.grant;
     }
 
-    let host = request.hostname;
     let headerHost = request.headers.host.split(':');
+    let host = headerHost[0];
     let port = headerHost[1] || '';
-    let redirectUrl = request.protocol + '://' + host + (port === '' ? '' : ':' + port) + '/';
+    let protocol = request.isSecure() ? 'https' : 'http';
+    let redirectUrl = protocol + '://' + host + (port === '' ? '' : ':' + port) + '/saml_redirect';
     let keycloakLogoutUrl = keycloak.logoutUrl(redirectUrl);
 
-    response.redirect(keycloakLogoutUrl);
+    response.redirect(keycloakLogoutUrl, next);
   };
 };

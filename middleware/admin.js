@@ -99,7 +99,7 @@ function adminNotBefore (request, response, keycloak) {
   });
 }
 
-module.exports = function (keycloak, adminUrl) {
+module.exports = function (keycloakAdapters, adminUrl) {
   let url = adminUrl;
   if (url[ url.length - 1 ] !== '/') {
     url = url + '/';
@@ -108,6 +108,10 @@ module.exports = function (keycloak, adminUrl) {
   let urlNotBefore = url + 'k_push_not_before';
 
   return function adminRequest (request, response, next) {
+    const keycloak = request.session.realmInfo && request.session.realmInfo.name ?
+      keycloakAdapters[request.session.realmInfo.name] :
+      keycloakAdapters['Default-Realm'];
+
     switch (request.url) {
       case urlLogout:
         adminLogout(request, response, keycloak);
