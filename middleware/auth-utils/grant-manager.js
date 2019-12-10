@@ -97,8 +97,11 @@ GrantManager.prototype.obtainFromCode = function obtainFromCode (request, code, 
     client_id: this.clientId,
     redirect_uri: request.session ? request.session.auth_redirect_uri : {}
   };
+  console.error('obtainFromCode - params: ', JSON.stringify(params));
   const handler = createHandler(this);
   const options = postOptions(this);
+  console.error('handler: ', JSON.stringify(handler));
+  console.error('options: ', JSON.stringify(options));
 
   return nodeify(fetch(this, handler, options, params), callback);
 };
@@ -502,6 +505,7 @@ const postOptions = (manager, path) => {
 const fetch = (manager, handler, options, params) => {
   return new Promise((resolve, reject) => {
     const data = (typeof params === 'string' ? params : querystring.stringify(params));
+    console.error('data in fetch: ', JSON.stringify(data));
     options.headers['Content-Length'] = data.length;
 
     const req = getProtocol(options).request(options, (response) => {
