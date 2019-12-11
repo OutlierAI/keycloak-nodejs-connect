@@ -34,8 +34,8 @@ module.exports = function (keycloakAdapters, logoutUrl) {
     let headerHost = request.headers.host.split(':');
     let host = headerHost[0];
     let port = headerHost[1] || '';
-    let protocol = request.isSecure() ? 'https' : 'http';
-    let redirectUrl = protocol + '://' + host + (port === '' ? '' : ':' + port) + '/saml_redirect';
+    let protocol = request.headers['x-forwarded-proto'] || (request.isSecure() ? 'https' : 'http');
+    let redirectUrl = protocol + '://' + host + (port === '' ? '' : ':' + port) + '/saml_callback';
     let keycloakLogoutUrl = keycloak.logoutUrl(redirectUrl);
 
     response.redirect(keycloakLogoutUrl, next);
