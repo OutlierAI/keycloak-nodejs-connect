@@ -280,6 +280,7 @@ GrantManager.prototype.validateAccessToken = function validateAccessToken (token
 };
 
 GrantManager.prototype.userInfo = function userInfo (token, callback) {
+  // TODO: we need to use the backend URL here, not frontend
   const url = this.realmUrl + '/protocol/openid-connect/userinfo';
   const options = URL.parse(url);
   options.method = 'GET';
@@ -486,6 +487,7 @@ const validationHandler = (manager, token) => (resolve, reject, json) => {
 };
 
 const postOptions = (manager, path) => {
+  // TODO: we need to use the backend URL here, not frontend
   const realPath = path || '/protocol/openid-connect/token';
   const opts = URL.parse(manager.realmUrl + realPath);
   opts.headers = {
