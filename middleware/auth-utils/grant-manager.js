@@ -489,7 +489,7 @@ const validationHandler = (manager, token) => (resolve, reject, json) => {
 const postOptions = (manager, path) => {
   // TODO: we need to use the backend URL here, not frontend, should be taken care of by the calling function
   const realPath = path || '/protocol/openid-connect/token';
-  const opts = URL.parse(manager.realmUrl + realPath);
+  const opts = URL.parse(manager.backendRealmUrl + realPath);
   opts.headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'X-Client': 'keycloak-nodejs-connect'
