@@ -100,6 +100,10 @@ Config.prototype.configure = function configure (config) {
    */
   this.realm = resolveValue(config.realm || config.realm);
 
+  this.backendUrl = 'http://keycloak.outlier/auth';
+
+  this.backendRealmUrl = this.backendUrl + '/realms/' + this.realm;
+
   /**
    * Client/Application ID
    * @type {String}
