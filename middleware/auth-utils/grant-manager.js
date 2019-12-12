@@ -33,7 +33,7 @@ var Rotation = require('./rotation');
  */
 function GrantManager (config) {
   this.realmUrl = config.realmUrl;
-  this.backendRealmUrl = config.backendRealmUrl;
+  this.realmBackendUrl = config.realmBackendUrl;
   this.clientId = config.clientId;
   this.secret = config.secret;
   this.publicKey = config.publicKey;
@@ -282,7 +282,7 @@ GrantManager.prototype.validateAccessToken = function validateAccessToken (token
 
 GrantManager.prototype.userInfo = function userInfo (token, callback) {
   // TODO: we need to use the backend URL here, not frontend
-  const url = this.backendRealmUrl + '/protocol/openid-connect/userinfo';
+  const url = this.realmBackendUrl + '/protocol/openid-connect/userinfo';
   const options = URL.parse(url);
   options.method = 'GET';
 
@@ -426,7 +426,7 @@ GrantManager.prototype.validateToken = function validateToken (token, expectedTy
     } else if (token.content.iat < this.notBefore) {
       reject(new Error('invalid token (stale token)'));
     } else if (token.content.iss !== this.realmUrl) {
-      reject(new Error(`invalid token (wrong ISS): issuer on token is ${token.content.iss} but realmUrl is ${this.realmUrl}`));
+      reject(new Error('invalid token (wrong ISS)'));
     } else {
       const verify = crypto.createVerify('RSA-SHA256');
       // if public key has been supplied use it to validate token
@@ -490,7 +490,7 @@ const validationHandler = (manager, token) => (resolve, reject, json) => {
 const postOptions = (manager, path) => {
   // TODO: we need to use the backend URL here, not frontend, should be taken care of by the calling function
   const realPath = path || '/protocol/openid-connect/token';
-  const opts = URL.parse(manager.backendRealmUrl + realPath);
+  const opts = URL.parse(manager.realmBackendUrl + realPath);
   opts.headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'X-Client': 'keycloak-nodejs-connect'

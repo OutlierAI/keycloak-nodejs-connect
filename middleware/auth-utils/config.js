@@ -100,10 +100,6 @@ Config.prototype.configure = function configure (config) {
    */
   this.realm = resolveValue(config.realm || config.realm);
 
-  this.backendUrl = 'http://keycloak.outlier/auth';
-
-  this.backendRealmUrl = this.backendUrl + '/realms/' + this.realm;
-
   /**
    * Client/Application ID
    * @type {String}
@@ -138,6 +134,11 @@ Config.prototype.configure = function configure (config) {
    * Root realm admin URL.
    * @type {String} */
   this.realmAdminUrl = this.authServerUrl + '/admin/realms/' + this.realm;
+
+  /**
+   * Backend realm URL so NodeJS Connect adapter can communicate with Keycloak using internal network.
+   * @type {String} */
+  this.realmBackendUrl = config.backendUrl + '/realms/' + this.realm;
 
   /**
    * How many minutes before retrying getting the keys.
