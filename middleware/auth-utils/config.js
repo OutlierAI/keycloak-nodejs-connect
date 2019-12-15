@@ -125,6 +125,12 @@ Config.prototype.configure = function configure (config) {
   this.authServerUrl = resolveValue(config['auth-server-url'] || config['server-url'] || config.serverUrl || config.authServerUrl);
 
   /**
+   * Path to redirect back to Service Provider application.
+   * @type {String}
+   */
+  this.redirectPath = config.redirectPath;
+
+  /**
    * Root realm URL.
    * @type {String}
    */

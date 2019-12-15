@@ -410,6 +410,10 @@ Keycloak.prototype.accountUrl = function () {
   return this.config.realmUrl + '/account';
 };
 
+Keycloak.prototype.redirectPath = function () {
+  return this.config.redirectPath;
+};
+
 Keycloak.prototype.getAccount = function (token) {
   return this.grantManager.getAccount(token);
 };
