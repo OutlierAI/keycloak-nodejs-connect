@@ -15,12 +15,8 @@
  */
 'use strict';
 
-const { getAdapterForRealm } = require('./auth-utils/utils');
-
-module.exports = function (keycloakAdapters) {
+module.exports = function (keycloak) {
   return function grantAttacher (request, response, next) {
-    const keycloak = getAdapterForRealm(request, keycloakAdapters);
-
     keycloak.getGrant(request, response)
       .then(grant => {
         request.kauth.grant = grant;

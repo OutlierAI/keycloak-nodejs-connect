@@ -15,12 +15,8 @@
  */
 'use strict';
 
-const { getAdapterForRealm } = require('./auth-utils/utils');
-
-module.exports = function (keycloakAdapters, logoutUrl) {
+module.exports = function (keycloak, logoutUrl) {
   return function logout (request, response, next) {
-    const keycloak = getAdapterForRealm(request, keycloakAdapters);
-
     if (request.url !== logoutUrl) {
       return next();
     }

@@ -16,12 +16,9 @@
 'use strict';
 
 const URL = require('url');
-const { getAdapterForRealm } = require('./auth-utils/utils');
 
-module.exports = function (keycloakAdapters) {
+module.exports = function (keycloak) {
   return function postAuth (request, response, next) {
-    const keycloak = getAdapterForRealm(request, keycloakAdapters);
-
     if (!request.query.auth_callback) {
       return next();
     }

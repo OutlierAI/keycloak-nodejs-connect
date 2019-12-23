@@ -17,7 +17,6 @@
 
 var Token = require('./auth-utils/token');
 var Signature = require('./auth-utils/signature');
-const { getAdapterForRealm } = require('./auth-utils/utils');
 
 function Admin (keycloak, url) {
   this._keycloak = keycloak;
@@ -100,7 +99,7 @@ function adminNotBefore (request, response, keycloak) {
   });
 }
 
-module.exports = function (keycloakAdapters, adminUrl) {
+module.exports = function (keycloak, adminUrl) {
   let url = adminUrl;
   if (url[ url.length - 1 ] !== '/') {
     url = url + '/';
@@ -109,8 +108,6 @@ module.exports = function (keycloakAdapters, adminUrl) {
   let urlNotBefore = url + 'k_push_not_before';
 
   return function adminRequest (request, response, next) {
-    const keycloak = getAdapterForRealm(request, keycloakAdapters);
-
     switch (request.url) {
       case urlLogout:
         adminLogout(request, response, keycloak);
