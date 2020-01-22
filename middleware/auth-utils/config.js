@@ -128,7 +128,13 @@ Config.prototype.configure = function configure (config) {
    * Path to redirect back to Service Provider application.
    * @type {String}
    */
-  this.redirectPath = config.redirectPath;
+  this.loginRedirectPath = config.loginRedirectPath;
+
+  /**
+   * Custom params for the logout redirect back to Service Provider application.
+   * @type {Object}
+   */
+  this.logoutRedirectParams = config.logoutRedirectParams || {};
 
   /**
    * Root realm URL.
