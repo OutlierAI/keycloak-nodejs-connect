@@ -413,8 +413,8 @@ Keycloak.prototype.loginRedirectPath = function () {
   return this.config.loginRedirectPath;
 };
 
-Keycloak.prototype.logoutRedirectParams = function () {
-  return this.config.logoutRedirectParams;
+Keycloak.prototype.logoutRedirectPath = function () {
+  return this.config.logoutRedirectPath;
 };
 
 Keycloak.prototype.getAccount = function (token) {
