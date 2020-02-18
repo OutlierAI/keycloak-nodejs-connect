@@ -125,6 +125,18 @@ Config.prototype.configure = function configure (config) {
   this.authServerUrl = resolveValue(config['auth-server-url'] || config['server-url'] || config.serverUrl || config.authServerUrl);
 
   /**
+   * Path to redirect back to Service Provider application.
+   * @type {String}
+   */
+  this.loginRedirectPath = config.loginRedirectPath;
+
+  /**
+   * Path to redirect back to Service Provider application after logout.
+   * @type {String}
+   */
+  this.logoutRedirectPath = config.logoutRedirectPath;
+
+  /**
    * Root realm URL.
    * @type {String}
    */
@@ -134,6 +146,11 @@ Config.prototype.configure = function configure (config) {
    * Root realm admin URL.
    * @type {String} */
   this.realmAdminUrl = this.authServerUrl + '/admin/realms/' + this.realm;
+
+  /**
+   * Backend realm URL so NodeJS Connect adapter can communicate with Keycloak using internal network.
+   * @type {String} */
+  this.realmBackendUrl = config.backendUrl + '/realms/' + this.realm;
 
   /**
    * How many minutes before retrying getting the keys.

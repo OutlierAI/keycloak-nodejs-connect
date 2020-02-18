@@ -27,14 +27,14 @@ const jwkToPem = require('jwk-to-pem');
  * @constructor
  */
 function Rotation (config) {
-  this.realmUrl = config.realmUrl;
+  this.realmBackendUrl = config.realmBackendUrl;
   this.minTimeBetweenJwksRequests = config.minTimeBetweenJwksRequests;
   this.jwks = [];
   this.lastTimeRequesTime = 0;
 }
 
 Rotation.prototype.retrieveJWKs = function retrieveJWKs (callback) {
-  const url = this.realmUrl + '/protocol/openid-connect/certs';
+  const url = this.realmBackendUrl + '/protocol/openid-connect/certs';
   const options = URL.parse(url);
   options.method = 'GET';
   const promise = new Promise((resolve, reject) => {

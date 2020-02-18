@@ -33,6 +33,7 @@ var Rotation = require('./rotation');
  */
 function GrantManager (config) {
   this.realmUrl = config.realmUrl;
+  this.realmBackendUrl = config.realmBackendUrl;
   this.clientId = config.clientId;
   this.secret = config.secret;
   this.publicKey = config.publicKey;
@@ -280,7 +281,7 @@ GrantManager.prototype.validateAccessToken = function validateAccessToken (token
 };
 
 GrantManager.prototype.userInfo = function userInfo (token, callback) {
-  const url = this.realmUrl + '/protocol/openid-connect/userinfo';
+  const url = this.realmBackendUrl + '/protocol/openid-connect/userinfo';
   const options = URL.parse(url);
   options.method = 'GET';
 
@@ -487,7 +488,7 @@ const validationHandler = (manager, token) => (resolve, reject, json) => {
 
 const postOptions = (manager, path) => {
   const realPath = path || '/protocol/openid-connect/token';
-  const opts = URL.parse(manager.realmUrl + realPath);
+  const opts = URL.parse(manager.realmBackendUrl + realPath);
   opts.headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'X-Client': 'keycloak-nodejs-connect'
